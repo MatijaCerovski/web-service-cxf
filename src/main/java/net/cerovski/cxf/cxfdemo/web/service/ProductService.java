@@ -1,0 +1,19 @@
+package net.cerovski.cxf.cxfdemo.web.service;
+
+import jakarta.jws.WebMethod;
+import jakarta.jws.WebParam;
+import jakarta.jws.WebService;
+import net.cerovski.cxf.cxfdemo.model.Product;
+
+import java.util.List;
+
+@WebService
+public interface ProductService {
+
+    @WebMethod
+    public List<Product> getAllProducts();
+
+    @WebMethod
+    public Product getProduct(@WebParam(name = "productId") int productId);
+
+}

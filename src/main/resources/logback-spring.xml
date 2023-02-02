@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- Setting up log path and log file name -->
+    <property name="LOG_PATH" value="./logs" />
+    <property name="APP_LOG_FILE" value="app" />
+    <property name="WS_LOG_FILE" value="ws" />
+
+    <!-- Setting up logging pattern for console logging -->
+    <appender name="ConsoleOutput"
+              class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                %white(%d{ISO8601}) %highlight(%-5level) [%yellow(%t)] : %msg%n%throwable
+            </Pattern>
+        </layout>
+    </appender>
+
+    <!-- Setting the filename and logging pattern for APP log file -->
+    <appender name="APP_LOG"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/${APP_LOG_FILE}.log</file>
+        <encoder
+                class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level : %msg%n
+            </Pattern>
+        </encoder>
+
+        <!-- Setting up a rolling policy with rolling done
+            daily and when file size is 10MB-->
+        <rollingPolicy
+                class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/archived/${APP_LOG_FILE}-%d{yyyy-MM-dd}.%i.log
+            </fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    <!-- Setting the filename and logging pattern for WS log file -->
+    <appender name="WS_LOG"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/${WS_LOG_FILE}.log</file>
+        <encoder
+                class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level : %msg%n
+            </Pattern>
+        </encoder>
+
+        <!-- Setting up a rolling policy with rolling done
+            daily and when file size is 10MB-->
+        <rollingPolicy
+                class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/archived/${WS_LOG_FILE}-%d{yyyy-MM-dd}.%i.log
+            </fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    <!-- Logging at INFO level -->
+    <root level="info">
+        <appender-ref ref="APP_LOG" />
+        <appender-ref ref="ConsoleOutput" />
+    </root>
+
+    <!-- Logging at TRACE level -->
+    <logger name="net.cerovski.cxf" level="trace" additivity="false">
+        <appender-ref ref="APP_LOG" />
+        <appender-ref ref="ConsoleOutput" />
+    </logger>
+
+    <!-- level INFO needed to log SOAP messages -->
+    <logger name="org.apache.cxf.services" level="INFO"
+            additivity="false">
+        <!-- specify a dedicated appender for the SOAP messages -->
+        <appender-ref ref="WS_LOG_FILE" />
+    </logger>
+
+
+</configuration>

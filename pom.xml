@@ -98,7 +98,7 @@
                         <id>information-web-service</id>
                         <phase>process-classes</phase>
                         <configuration>
-                            <className>net.croz.cxf.apachecxfdemo.web.service.ProductService</className>
+                            <className>net.cerovski.cxf.cxfdemo.web.service.ProductService</className>
                             <outputFile>${project.build.directory}/generated/wsdl/ProductService.wsdl</outputFile>
                             <genWsdl>true</genWsdl>
                             <verbose>false</verbose>
